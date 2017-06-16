@@ -1,0 +1,240 @@
+2017-05-05 17:09:54,482 - all fileList handle process
+2017-05-05 17:10:02,162 - beijingshi-fangdichan-feature cluster_k:20
+2017-05-05 17:10:13,890 - beijingshi-fangdichan-feature用时:11.809675216674805s
+2017-05-05 17:10:13,896 - beijingshi-fangdichan-featureexception1:
+2017-05-05 17:10:13,896 - [Errno 2] No such file or directory: '/search/odin/taoyongbo/rank/poiRank_hotcountrank/beijingshi-fangdichan-feature-rank'
+2017-05-05 17:10:15,201 - 完成用时20.71918511390686s
+2017-05-05 17:10:15,201 - all fileList handle finished
+2017-05-05 17:11:11,644 - all fileList handle process
+2017-05-05 17:11:19,457 - beijingshi-fangdichan-feature cluster_k:20
+2017-05-05 17:11:30,942 - beijingshi-fangdichan-feature用时:11.518658638000488s
+2017-05-05 17:11:37,457 - 完成用时25.81247639656067s
+2017-05-05 17:11:37,457 - all fileList handle finished
+2017-05-05 17:14:51,078 - all fileList handle process
+2017-05-05 17:14:58,096 - beijingshi-fangdichan-feature cluster_k:20
+2017-05-05 17:15:10,479 - beijingshi-fangdichan-feature用时:12.456712484359741s
+2017-05-05 17:15:17,070 - 完成用时25.993486642837524s
+2017-05-05 17:15:17,071 - all fileList handle finished
+2017-06-12 10:03:47,485 - all fileList handle process
+2017-06-12 10:04:29,082 - all fileList handle process
+2017-06-12 10:04:48,091 - shanghaishi-feature cluster_k:20
+2017-06-12 10:06:31,658 - shanghaishi-feature用时:118.84079718589783s
+2017-06-12 10:06:31,659 - shanghaishi-featuresingleException2:
+2017-06-12 10:06:32,943 - 完成用时123.86108446121216s
+2017-06-12 10:06:32,944 - all fileList handle finished
+2017-06-12 13:35:05,788 - all fileList handle process
+2017-06-12 13:35:05,788 - total file:1
+2017-06-12 13:35:19,571 - 完成用时13.782788276672363s
+2017-06-12 13:35:19,571 - all fileList handle finished
+2017-06-12 13:36:22,738 - all fileList handle process
+2017-06-12 13:36:22,739 - total file:2
+2017-06-12 13:36:42,629 - shanghaishi-feature cluster_k:20
+2017-06-12 13:38:22,196 - shanghaishi-feature用时:115.5876111984253s
+2017-06-12 13:38:22,197 - [Errno 2] No such file or directory: '/search/odin/taoyongbo/rank/poiRank_hotcountrank/shanghaishi-feature-hotCount_rank'
+2017-06-12 13:38:22,197 - shanghaishi-featuresingleException2:
+2017-06-12 13:38:23,168 - 完成用时120.42988801002502s
+2017-06-12 13:38:23,169 - all fileList handle finished
+2017-06-12 13:41:33,314 - all fileList handle process
+2017-06-12 13:41:33,315 - total file:2
+2017-06-12 13:46:20,897 - all fileList handle process
+2017-06-12 13:46:20,898 - total file:2
+2017-06-12 13:46:40,901 - shanghaishi-feature cluster_k:20
+2017-06-12 13:48:19,220 - shanghaishi-feature用时:114.95457482337952s
+2017-06-12 13:48:19,221 - [Errno 2] No such file or directory: '/search/odin/taoyongbo/rank/poiRank_hotcountrank/shanghaishi-feature-hotCount_rank'
+2017-06-12 13:48:19,221 - shanghaishi-featuresingleException2:
+2017-06-12 13:48:20,294 - 完成用时119.39682936668396s
+2017-06-12 13:48:20,295 - all fileList handle finished
+2017-06-12 13:49:13,141 - all fileList handle process
+2017-06-12 13:49:13,142 - total file:2
+2017-06-12 13:49:33,042 - shanghaishi-feature cluster_k:20
+2017-06-12 13:51:22,030 - shanghaishi-feature用时:125.43717455863953s
+2017-06-12 13:51:22,031 - [Errno 2] No such file or directory: '/search/odin/taoyongbo/rank/poiRank_hotcountrank/shanghaishi-feature-hotCount_rank'
+2017-06-12 13:51:22,031 - shanghaishi-featuresingleException2:
+2017-06-12 13:51:23,100 - 完成用时129.95943355560303s
+2017-06-12 13:51:23,100 - all fileList handle finished
+2017-06-12 13:53:30,083 - all fileList handle process
+2017-06-12 13:53:30,084 - total file:2
+2017-06-12 13:53:50,241 - shanghaishi-feature cluster_k:20
+2017-06-12 13:55:48,895 - shanghaishi-feature用时:134.48069190979004s
+2017-06-12 13:55:54,662 - 完成用时144.57826948165894s
+2017-06-12 13:55:54,662 - all fileList handle finished
+2017-06-12 14:10:58,977 - all fileList handle process
+2017-06-12 14:10:58,977 - total file:1
+2017-06-12 14:11:12,746 - 完成用时13.768787384033203s
+2017-06-12 14:11:12,746 - all fileList handle finished
+2017-06-12 14:11:56,581 - all fileList handle process
+2017-06-12 14:11:56,581 - total file:1
+2017-06-12 14:12:33,641 - 完成用时37.06011986732483s
+2017-06-12 14:12:33,641 - all fileList handle finished
+2017-06-12 14:12:52,629 - all fileList handle process
+2017-06-12 14:12:52,630 - total file:1
+2017-06-12 14:14:06,948 - all fileList handle process
+2017-06-12 14:14:06,949 - total file:1
+2017-06-12 14:14:20,375 - 完成用时13.42676830291748s
+2017-06-12 14:14:20,375 - all fileList handle finished
+2017-06-12 14:14:34,623 - all fileList handle process
+2017-06-12 14:14:34,623 - total file:1
+2017-06-12 14:20:02,257 - all fileList handle process
+2017-06-12 14:20:02,257 - total file:1
+2017-06-12 14:20:16,051 - 完成用时13.79478907585144s
+2017-06-12 14:20:16,051 - all fileList handle finished
+2017-06-12 14:20:31,536 - all fileList handle process
+2017-06-12 14:20:31,537 - total file:1
+2017-06-12 14:20:45,468 - 完成用时13.93179702758789s
+2017-06-12 14:20:45,468 - all fileList handle finished
+2017-06-12 14:22:13,970 - all fileList handle process
+2017-06-12 14:22:13,970 - total file:1
+2017-06-12 14:22:26,672 - Error tokenizing data. C error: EOF inside string starting at line 818975
+2017-06-12 14:22:26,672 - suzhoushi-featuresingleException2:
+2017-06-12 14:22:28,008 - 完成用时14.037802696228027s
+2017-06-12 14:22:28,008 - all fileList handle finished
+2017-06-12 14:24:20,721 - all fileList handle process
+2017-06-12 14:24:20,722 - total file:1
+2017-06-12 14:24:35,783 - suzhoushi-feature cluster_k:20
+2017-06-12 14:25:54,584 - suzhoushi-feature用时:89.70913124084473s
+2017-06-12 14:25:58,777 - 完成用时98.05560851097107s
+2017-06-12 14:25:58,778 - all fileList handle finished
+2017-06-12 14:45:01,622 - all fileList handle process
+2017-06-12 14:45:01,623 - total file:1
+2017-06-12 14:45:06,895 - baishalizuzizhixian-binguanfandian-feature cluster_k:6
+2017-06-12 14:45:06,971 - baishalizuzizhixian-binguanfandian-feature用时:0.8330473899841309s
+2017-06-12 14:45:06,972 - baishalizuzizhixian-binguanfandian-featureexception1:
+2017-06-12 14:45:06,972 - [Errno 2] No such file or directory: '/search/odin/taoyongbo/rank/poiRank_hotcountrank/baishalizuzizhixian-binguanfandian-feature-rank'
+2017-06-12 14:45:09,268 - 完成用时7.645437479019165s
+2017-06-12 14:45:09,268 - all fileList handle finished
+2017-06-12 14:45:18,766 - all fileList handle process
+2017-06-12 14:45:18,766 - total file:1
+2017-06-12 14:45:23,765 - baishalizuzizhixian-binguanfandian-feature cluster_k:6
+2017-06-12 14:45:23,934 - baishalizuzizhixian-binguanfandian-feature用时:1.0520601272583008s
+2017-06-12 14:45:25,987 - 完成用时7.220412731170654s
+2017-06-12 14:45:25,987 - all fileList handle finished
+2017-06-12 14:46:22,006 - all fileList handle process
+2017-06-12 14:46:22,007 - total file:1
+2017-06-12 14:46:25,533 - baishalizuzizhixian-tiyuchangguan-featureexception4:autoGetK
+2017-06-12 14:46:25,534 - list index out of range
+2017-06-12 14:46:25,534 - baishalizuzizhixian-tiyuchangguan-feature cluster_k:None
+2017-06-12 14:46:25,534 - baishalizuzizhixian-tiyuchangguan-featureexception1:
+2017-06-12 14:46:25,534 - '<' not supported between instances of 'int' and 'NoneType'
+2017-06-12 14:46:29,617 - 完成用时7.610435485839844s
+2017-06-12 14:46:29,617 - all fileList handle finished
+2017-06-12 14:48:59,855 - all fileList handle process
+2017-06-12 14:48:59,856 - total file:1
+2017-06-12 14:49:02,787 - baishalizuzizhixian-tiyuchangguan-feature cluster_k:5
+2017-06-12 14:49:02,848 - baishalizuzizhixian-tiyuchangguan-feature用时:0.06400346755981445s
+2017-06-12 14:49:07,304 - 完成用时7.449426174163818s
+2017-06-12 14:49:07,304 - all fileList handle finished
+2017-06-12 14:50:42,954 - all fileList handle process
+2017-06-12 14:50:42,954 - total file:1
+2017-06-12 14:50:47,771 - lingaoxian-tiyuchangguan-featureexception4:autoGetK
+2017-06-12 14:50:47,771 - Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2017-06-12 14:50:47,771 - lingaoxian-tiyuchangguan-feature cluster_k:None
+2017-06-12 14:50:47,772 - lingaoxian-tiyuchangguan-featureexception1:
+2017-06-12 14:50:47,772 - '<' not supported between instances of 'int' and 'NoneType'
+2017-06-12 14:50:50,159 - 完成用时7.205412149429321s
+2017-06-12 14:50:50,160 - all fileList handle finished
+2017-06-12 14:51:42,309 - all fileList handle process
+2017-06-12 14:51:42,310 - total file:1
+2017-06-12 14:51:46,016 - lingaoxian-tiyuchangguan-feature cluster_k:10
+2017-06-12 14:51:46,089 - lingaoxian-tiyuchangguan-feature用时:0.0760040283203125s
+2017-06-12 14:51:49,379 - 完成用时7.069404125213623s
+2017-06-12 14:51:49,380 - all fileList handle finished
+2017-06-12 14:53:15,428 - all fileList handle process
+2017-06-12 14:53:15,428 - total file:1
+2017-06-12 14:53:21,186 - lingaoxian-tiyuchangguan-featureexception4:autoGetK
+2017-06-12 14:53:21,186 - Number of labels is 1. Valid values are 2 to n_samples - 1 (inclusive)
+2017-06-12 14:53:21,186 - lingaoxian-tiyuchangguan-feature cluster_k:None
+2017-06-12 14:53:21,186 - lingaoxian-tiyuchangguan-featureexception1:
+2017-06-12 14:53:21,187 - '<' not supported between instances of 'int' and 'NoneType'
+2017-06-12 14:53:22,623 - 完成用时7.195411443710327s
+2017-06-12 14:53:22,623 - all fileList handle finished
+2017-06-12 14:54:51,849 - all fileList handle process
+2017-06-12 14:54:51,849 - total file:1
+2017-06-12 14:54:55,706 - lingaoxian-tiyuchangguan-feature cluster_k:10
+2017-06-12 14:54:55,765 - lingaoxian-tiyuchangguan-feature用时:0.09200525283813477s
+2017-06-12 14:54:59,297 - 完成用时7.448426008224487s
+2017-06-12 14:54:59,297 - all fileList handle finished
+2017-06-12 14:56:38,618 - all fileList handle process
+2017-06-12 14:56:38,619 - total file:1
+2017-06-12 14:56:42,734 - lingaoxian-tiyuchangguan-feature cluster_k:5
+2017-06-12 14:56:44,212 - lingaoxian-tiyuchangguan-feature用时:1.4970858097076416s
+2017-06-12 14:56:46,160 - 完成用时7.541431427001953s
+2017-06-12 14:56:46,161 - all fileList handle finished
+2017-06-12 14:58:40,655 - all fileList handle process
+2017-06-12 14:58:40,655 - total file:1
+2017-06-12 14:58:46,319 - zhanghuaxian-youzhengdianxin-feature cluster_k:5
+2017-06-12 14:58:47,733 - zhanghuaxian-youzhengdianxin-feature用时:4.192239999771118s
+2017-06-12 14:58:48,681 - 完成用时8.025458812713623s
+2017-06-12 14:58:48,681 - all fileList handle finished
+2017-06-12 15:13:31,225 - all fileList handle process
+2017-06-12 15:13:31,225 - total file:1
+2017-06-12 15:13:37,772 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 15:13:42,126 - beijingshi-jiaotongchuxing-feature用时:4.376250505447388s
+2017-06-12 15:13:46,337 - 完成用时15.1118643283844s
+2017-06-12 15:13:46,337 - all fileList handle finished
+2017-06-12 15:23:44,385 - all fileList handle process
+2017-06-12 15:23:44,385 - total file:1
+2017-06-12 15:23:50,498 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 15:23:55,424 - beijingshi-jiaotongchuxing-feature用时:4.952282905578613s
+2017-06-12 15:23:59,745 - 完成用时15.359878540039062s
+2017-06-12 15:23:59,745 - all fileList handle finished
+2017-06-12 15:48:36,379 - all fileList handle process
+2017-06-12 15:48:36,379 - total file:1
+2017-06-12 15:48:45,042 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 15:48:49,390 - beijingshi-jiaotongchuxing-feature用时:7.382422208786011s
+2017-06-12 15:48:54,582 - 完成用时18.202041149139404s
+2017-06-12 15:48:54,583 - all fileList handle finished
+2017-06-12 15:49:19,176 - all fileList handle process
+2017-06-12 15:49:19,177 - total file:1
+2017-06-12 15:49:27,486 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 15:49:32,115 - beijingshi-jiaotongchuxing-feature用时:6.968398571014404s
+2017-06-12 15:49:36,771 - 完成用时17.595006227493286s
+2017-06-12 15:49:36,772 - all fileList handle finished
+2017-06-12 16:02:26,592 - all fileList handle process
+2017-06-12 16:02:26,593 - total file:1
+2017-06-12 16:02:32,458 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 16:02:37,787 - beijingshi-jiaotongchuxing-featureexception1:
+2017-06-12 16:02:37,788 - [Errno 13] Permission denied: 'D:\\structure\\rank\\label'
+2017-06-12 16:02:39,112 - 完成用时12.519716024398804s
+2017-06-12 16:02:39,113 - all fileList handle finished
+2017-06-12 16:03:02,504 - all fileList handle process
+2017-06-12 16:03:02,504 - total file:1
+2017-06-12 16:03:08,657 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 16:03:13,640 - beijingshi-jiaotongchuxing-feature用时:5.00628662109375s
+2017-06-12 16:03:18,386 - 完成用时15.881908655166626s
+2017-06-12 16:03:18,386 - all fileList handle finished
+2017-06-12 16:04:50,819 - all fileList handle process
+2017-06-12 16:04:50,819 - total file:1
+2017-06-12 16:04:56,816 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 16:05:01,741 - beijingshi-jiaotongchuxing-feature用时:4.949283123016357s
+2017-06-12 16:05:06,440 - 完成用时15.620893478393555s
+2017-06-12 16:05:06,441 - all fileList handle finished
+2017-06-12 16:18:22,954 - all fileList handle process
+2017-06-12 16:18:22,955 - total file:1
+2017-06-12 16:18:29,129 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 16:18:34,071 - beijingshi-jiaotongchuxing-feature用时:4.9672839641571045s
+2017-06-12 16:18:38,609 - 完成用时15.654895305633545s
+2017-06-12 16:18:38,609 - all fileList handle finished
+2017-06-12 16:18:56,530 - all fileList handle process
+2017-06-12 16:18:56,530 - total file:1
+2017-06-12 16:19:02,771 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 16:19:07,269 - beijingshi-jiaotongchuxing-feature用时:4.525258779525757s
+2017-06-12 16:19:11,923 - 完成用时15.393880605697632s
+2017-06-12 16:19:11,924 - all fileList handle finished
+2017-06-12 16:23:02,098 - all fileList handle process
+2017-06-12 16:23:02,098 - total file:1
+2017-06-12 16:23:07,907 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 16:23:12,812 - beijingshi-jiaotongchuxing-feature用时:4.929281711578369s
+2017-06-12 16:23:17,444 - 完成用时15.345877885818481s
+2017-06-12 16:23:17,445 - all fileList handle finished
+2017-06-12 16:33:36,121 - all fileList handle process
+2017-06-12 16:33:36,121 - total file:1
+2017-06-12 16:33:41,567 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 16:33:47,309 - beijingshi-jiaotongchuxing-feature用时:5.841334104537964s
+2017-06-12 16:33:51,839 - 完成用时15.717899084091187s
+2017-06-12 16:33:51,839 - all fileList handle finished
+2017-06-12 16:34:28,932 - all fileList handle process
+2017-06-12 16:34:28,933 - total file:1
+2017-06-12 16:34:34,825 - beijingshi-jiaotongchuxing-feature cluster_k:20
+2017-06-12 16:34:40,265 - beijingshi-jiaotongchuxing-feature用时:5.462312459945679s
+2017-06-12 16:34:44,957 - 完成用时16.024916648864746s
+2017-06-12 16:34:44,957 - all fileList handle finished
