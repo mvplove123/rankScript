@@ -304,9 +304,11 @@ def show_menu(task_menu):
 
 
 def numbers_to_functions_to_strings(argument):
+    """
+    Execute the function
+    """
     funcInfo = task_menu.get(argument, lambda: "nothing")
     func = funcInfo.get('function')
-    # Execute the function
     return func()
 
 
