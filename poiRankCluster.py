@@ -58,7 +58,6 @@ def files_rank_cluster(local_featurePoi_path, output_path=None, cluster_type="mu
             pool.apply_async(rank_cluster, (file,))  # 多维度聚类
         else:
             pool.apply_async(rank_cluster_singleColumn, (file, column))  # 单字段聚类
-
     pool.close()
     pool.join()
 
@@ -84,6 +83,7 @@ def rank_cluster(file):
                                         'hotCount', 'hitcount', 'viewcount', 'sumViewOrder'], quoting=csv.QUOTE_NONE,
                                  encoding='gb18030')
 
+        featurePoi = featurePoi.sample(frac=1).reset_index(drop=True)
         parentCategory = featurePoi['parentCategory'][0]
         begin_time = time.time()
         W = weight.ix[weight.parentCategory == parentCategory, 2:]
@@ -94,8 +94,7 @@ def rank_cluster(file):
         featurePoi.loc[:, ('sumWeight')] = featureValues.sum(axis=1)
 
         cluster_k, rank_k = get_k(file_name, featureValues)
-
-        kmeans_model = KMeans(n_clusters=cluster_k, init='k-means++', random_state=0).fit(featureValues)
+        kmeans_model = KMeans(n_clusters=cluster_k, init='k-means++',n_jobs=1,n_init=100,max_iter=500,tol=1e-5).fit(featureValues)
         featurePoi.loc[:, ('label')] = kmeans_model.labels_
         df = DataFrame(kmeans_model.cluster_centers_, columns=['subCategoryScore', 'realKeyword', 'commentNum', 'price',
                                                                'grade', 'matchCount', 'area', 'childNum', 'doorNum',
@@ -130,7 +129,7 @@ def rank_cluster(file):
         end_time = time.time()
 
         logger.info('{file_name}用时:{use_time}s'.format(file_name=file_name, use_time=end_time - begin_time))
-
+        sort_df.to_csv(constant.local_featurePoi_center_path+file_name+'-rank-center', encoding='gb18030', sep='\t', index=False, header=True)
         path = local_featurePoiRank_path + file_name + "-rank"
         df_merged.to_csv(path, encoding='gb18030', sep='\t', index=False, header=False)
     except Exception as e:

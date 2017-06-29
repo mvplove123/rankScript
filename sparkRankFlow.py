@@ -154,6 +154,9 @@ def rank_create():
     multi_rank_path = constant.rank_path + "multi/"
     single_rank_path = constant.rank_path + "single/"
 
+    if os.path.exists(constant.local_featurePoi_center_path):
+        shutil.rmtree(constant.local_featurePoi_center_path)
+    os.mkdir(constant.local_featurePoi_center_path)
     if os.path.exists(multi_rank_path):
         shutil.rmtree(multi_rank_path)
     os.mkdir(multi_rank_path)
@@ -257,7 +260,7 @@ def rank_task_finish_sign():
 
 def back_rank(environment):
     download_begin_time = time.time()
-    now = environment+'_'+datetime.datetime.now().strftime('%Y%m%d_%H:%M')
+    now = environment + '_' + datetime.datetime.now().strftime('%Y%m%d_%H:%M')
     current_back_rank_path = constant.back_rank_path + now
     if os.path.exists(current_back_rank_path):
         shutil.rmtree(current_back_rank_path)
@@ -265,6 +268,10 @@ def back_rank(environment):
 
     commond = "hadoop fs -get /user/go2data_rank/taoyongbo/output/multiOptimizeRank/*-rank " + current_back_rank_path
     utils.execute_command(commond, shell=True)
+
+    mv_commond = "mv " + constant.local_featurePoi_center_path + " " + current_back_rank_path + "/" + now + "_center"
+    utils.execute_command(mv_commond, shell=True)
+
     logger.info("rank backup finished,used time:%s s", str(time.time() - download_begin_time))
 
 
@@ -280,7 +287,8 @@ def main(environment='beta'):
     rank_optimization(environment)
     rank_task_finish_sign()
     back_rank(environment)
-    logger.info("rank work flow finished,total time:{time}s,environment:{environment}".format(time=str(time.time() - rank_begin_time),environment=environment) )
+    logger.info("rank work flow finished,total time:{time}s,environment:{environment}".format(
+        time=str(time.time() - rank_begin_time), environment=environment))
 
 
 if __name__ == '__main__':

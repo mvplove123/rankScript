@@ -4,6 +4,7 @@ jar_path = "/search/odin/taoyongbo/rank/prod/scala_spark/"
 java_jar_path = "/search/odin/taoyongbo/rank/java_spark/"
 local_featurePoi_path = '/search/odin/taoyongbo/rank/featurePoi/'
 local_city_featurePoi_path = '/search/odin/taoyongbo/rank/cityFeaturePoi/'
+local_featurePoi_center_path = '/search/odin/taoyongbo/rank/rank_center/'
 rank_path = "/search/odin/taoyongbo/rank/rankResult/"
 
 root_path = '/search/odin/taoyongbo/rank/'
