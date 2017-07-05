@@ -168,7 +168,7 @@ def rank_cluster_singleColumn(file, column):
         if cluster_k <= rank_k:
             rank_k = cluster_k
 
-        kmeans_model = KMeans(n_clusters=cluster_k, init='k-means++', random_state=0).fit(featureSumWeight)
+        kmeans_model = KMeans(n_clusters=cluster_k, init='k-means++', random_state=0,n_init=100).fit(featureSumWeight)
         featurePoi.loc[:, (column_label)] = kmeans_model.labels_
 
         df = DataFrame(kmeans_model.cluster_centers_, columns=['center_mean_weight'])
