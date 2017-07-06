@@ -280,15 +280,15 @@ def polygonRank_task(environment='beta'):
     utils.execute_command(commond, shell=True)
     logger.info("spark polygonRank_task finished")
 
-def structureRankCompare_task(environment='beta'):
-    logger.info("spark structureRankCompare_task process:{environment}".format(environment=environment))
+def structureMapRank_task(environment='beta'):
+    logger.info("spark structureMapRank_task process:{environment}".format(environment=environment))
     scala_jar_path = root_path + environment + '/scala_spark/'
     scala_libjars_path = scala_jar_path + 'lib'
     fileList, dirList = utils.get_files(scala_libjars_path)
     libjars = ",".join(fileList)
-    commond = "spark-submit --master yarn --deploy-mode cluster --name StructureRankCompareTask --class testTasks.StructureRankCompareTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    commond = "spark-submit --master yarn --deploy-mode cluster --name StructureMapRankTask --class cluster.task.StructureMapRankTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
     utils.execute_command(commond, shell=True)
-    logger.info("spark structureRankCompare_task finished")
+    logger.info("spark structureMapRank_task finished")
 
 
 def show_menu(task_menu):
@@ -331,7 +331,7 @@ task_menu = {
     16: dict(name="brandRank_task", function=brandRank_task),
     17: dict(name="rank_optimize_task", function=rank_optimize_task),
     18: dict(name="matchCount_distcp", function=matchCount_distcp),
-    19:dict(name="structureRankCompare_task", function=structureRankCompare_task),
+    19:dict(name="structureMapRank_task", function=structureMapRank_task),
 
 }
 

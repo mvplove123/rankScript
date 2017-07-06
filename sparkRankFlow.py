@@ -69,10 +69,10 @@ def feature_poi_create(environment='beta'):
 
     # 特征值数据生产
     feature_poi_create_time = time.time()
-    sparkTask.xml_distcp(zeus_poi_path, zeus_buspoi_path, zeus_myself_path, zeus_structure_path, zeus_polygon_path)
+    # sparkTask.xml_distcp(zeus_poi_path, zeus_buspoi_path, zeus_myself_path, zeus_structure_path, zeus_polygon_path)
     logger.info("xml_distcp finished,used time:%s s", str(time.time() - feature_poi_create_time))
 
-    sparkTask.poi_task(environment)
+    # sparkTask.poi_task(environment)
     # gps discp
     if not diff_version(constant.rsync_version_path + 'remote_gps_version',
                         constant.rsync_version_path + 'spark_gps_version'):
@@ -197,16 +197,16 @@ def rank_combine_upload(environment):
     """
     rank_combine_upload_time = time.time()
 
-    rm_rank_commond = "hadoop fs -rm -r taoyongbo/output/hitCountRank/* taoyongbo/output/hotCountRank/* taoyongbo/output/multiRank/*"
+    rm_rank_commond = "hadoop fs -rm -r taoyongbo/output/rank/hitCountRank/* taoyongbo/output/rank/hotCountRank/* taoyongbo/output/rank/multiRank/*"
     utils.execute_command(rm_rank_commond, shell=True)
 
-    upload_multiRank_commond = "hadoop fs -put " + constant.rank_path + "multiRank taoyongbo/output/multiRank/"
+    upload_multiRank_commond = "hadoop fs -put " + constant.rank_path + "multiRank taoyongbo/output/rank/multiRank/"
     utils.execute_command(upload_multiRank_commond, shell=True)
 
-    upload_hotCountRank_commond = "hadoop fs -put " + constant.rank_path + "hotCountRank taoyongbo/output/hotCountRank/"
+    upload_hotCountRank_commond = "hadoop fs -put " + constant.rank_path + "hotCountRank taoyongbo/output/rank/hotCountRank/"
     utils.execute_command(upload_hotCountRank_commond, shell=True)
 
-    upload_hitCountRank_commond = "hadoop fs -put " + constant.rank_path + "hitCountRank taoyongbo/output/hitCountRank/"
+    upload_hitCountRank_commond = "hadoop fs -put " + constant.rank_path + "hitCountRank taoyongbo/output/rank/hitCountRank/"
     utils.execute_command(upload_hitCountRank_commond, shell=True)
 
     # rank数据整合
@@ -220,7 +220,7 @@ def rank_cluster():
 
     logger.info("spark multi_rank begin:")
 
-    rm_multiRank_commond = "hadoop fs -rmr  taoyongbo/output/multiRank/*"
+    rm_multiRank_commond = "hadoop fs -rmr  taoyongbo/output/rank/multiRank/*"
     utils.execute_command(rm_multiRank_commond, shell=True)
     multi_rank()
     logger.info("spark multi_rank finished,used time:%s s", str(time.time() - multi_rank_time))
@@ -268,6 +268,33 @@ def back_rank(environment):
     logger.info("rank backup finished,used time:%s s", str(time.time() - download_begin_time))
 
 
+def structure_rank_create(environment):
+    """
+    结构化rank创建映射，并优化rank
+    :param environment: 
+    :return: 
+    """
+    structure_rank_create_time = time.time()
+    sparkTask.structureMapRank_task(environment)
+
+    #结构化rank下载
+    commond = "hadoop fs -text /user/go2data_rank/taoyongbo/output/rank/structureMapRank/part* > " + constant.local_structure_rank_path
+    utils.execute_command(commond, shell=True)
+
+    #结构化rank 优化
+    parse_commond = "java -Xms4096M -Xmx7096M -jar " + constant.java_jar_path + "structure-optimize-1.0-SNAPSHOT.jar "+constant.local_structure_rank_path +" "+constant.local_structure_optimize_path
+    utils.execute_command(parse_commond, shell=True)
+
+    #结构化rank上传
+    rm_rank_structure_status_commond = "hadoop fs -rm -r taoyongbo/output/rank/structureOptimizeRank/*"
+    utils.execute_command(rm_rank_structure_status_commond, shell=True)
+    upload_rank_structure_status_commond = "hadoop fs -put " + constant.local_structure_optimize_path + " taoyongbo/output/rank/structureOptimizeRank/"
+    utils.execute_command(upload_rank_structure_status_commond, shell=True)
+
+    logger.info("spark structure_rank_create finished,used time:%s s", str(time.time() - structure_rank_create_time))
+
+
+
 def main(environment='beta'):
     rank_begin_time = time.time()
     logger.info("rank work flow begin")
@@ -277,6 +304,7 @@ def main(environment='beta'):
     rank_create()
     rank_combine_upload(environment)
     brand_rank_create(environment)
+    structure_rank_create(environment)
     rank_optimization(environment)
     rank_task_finish_sign()
     back_rank(environment)
