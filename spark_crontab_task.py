@@ -7,15 +7,14 @@
 # @desc    :
 import datetime
 import time
-from collections import Counter
 
 import constant
 import utils
-from sparkTask import matchcount_task
 from utils import get_logger
 
 logger = get_logger('/search/odin/taoyongbo/rank/beta/python_spark/spark_crontab_task')
 
+hadoop = '/usr/local/hadoop2.0/bin/hadoop'
 
 def rsync_hit_count():
     start_time = time.time()
@@ -56,18 +55,28 @@ def match_count_calculate():
     last_month = first - datetime.timedelta(days=1)
     previous_month = last_month.strftime("%Y_%m")
     logger.info('previous_month {previous_month}:match_count_calculate start'.format(previous_month=previous_month))
-    flag =False
-    try:
-        matchcount_task('beta')
-    except Exception as e:
-        print(e)
-    match_count_calculate_commond = 'echo ' + previous_month + ' > ' + constant.rsync_version_path + 'remote_match_count_version'
-    utils.execute_command(match_count_calculate_commond, shell=True)
+
+    logger.info("spark matchcount_task process:{environment}".format(environment='beta'))
+    input_path = "/user/go2data_rank/taoyongbo/input/"
+    output_path = "/user/go2data_rank/taoyongbo/output/"
+    scala_jar_path = '/search/odin/taoyongbo/rank/beta/scala_spark/'
+
+    commond = "/opt/spark/bin/spark-submit --master yarn --deploy-mode cluster --name MatchCountTask --class cluster.task.MatchCountTask --executor-memory 4G --num-executors 19 --executor-cores 5  --conf spark.default.parallelism=3000 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input_path + " " + output_path
+    utils.execute_command(commond, shell=True)
+
+    rm_backup_matchcount_commond = hadoop+' fs -rm -r taoyongbo/output/back_matchCount'
+    utils.execute_command(rm_backup_matchcount_commond, shell=True)
+
+    mv_backup_matchcount_commond = hadoop+' fs -mv taoyongbo/output/matchCount taoyongbo/output/back_matchCount'
+    utils.execute_command(mv_backup_matchcount_commond, shell=True)
+
+    rename_matchcount_commond = hadoop+' fs -mv taoyongbo/output/newMatchCount taoyongbo/output/matchCount'
+    utils.execute_command(rename_matchcount_commond, shell=True)
+    logger.info("spark matchcount_task finished")
 
     logger.info('previous_month {previous_month}:match_count_calculate finished,used_time{used_time}'.format(
         previous_month=previous_month, used_time=time.time() - start_time))
 
 
-if __name__ == '__main__':
-    # rsync_hit_count()
-    match_count_calculate()
+match_count_calculate()
+rsync_hit_count()

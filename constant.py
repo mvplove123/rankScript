@@ -1,10 +1,15 @@
 # encoding=gb18030
-lib_path = "/search/odin/taoyongbo/rank/prod/scala_spark/lib"
-jar_path = "/search/odin/taoyongbo/rank/prod/scala_spark/"
+lib_path = "/search/odin/taoyongbo/rank/beta/scala_spark/lib"
+jar_path = "/search/odin/taoyongbo/rank/beta/scala_spark/"
 java_jar_path = "/search/odin/taoyongbo/rank/java_spark/"
 local_featurePoi_path = '/search/odin/taoyongbo/rank/featurePoi/'
 local_city_featurePoi_path = '/search/odin/taoyongbo/rank/cityFeaturePoi/'
 local_featurePoi_center_path = '/search/odin/taoyongbo/rank/rank_center/'
+local_structure_optimize_path = '/search/odin/taoyongbo/rank/rankResult/structureOptimizeRank'
+local_structure_rank_path = '/search/odin/taoyongbo/rank/result/structureRank'
+local_split_featurePoi_path = '/search/odin/taoyongbo/rank/splitfeaturePoi/'
+default_rank_output = 'taoyongbo/output/multiOptimizeRank'
+
 rank_path = "/search/odin/taoyongbo/rank/rankResult/"
 
 root_path = '/search/odin/taoyongbo/rank/'
@@ -54,7 +59,7 @@ rsync_version_path = '/search/odin/taoyongbo/rank/rsync_version/'
 
 #back_rank
 back_rank_path = '/search/odin/taoyongbo/rank/back_rank/'
-
+default_rank_output_path = '/search/odin/taoyongbo/output/rank/multiOptimizeRank'
 
 
 # poi rank
