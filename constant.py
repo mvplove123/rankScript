@@ -72,3 +72,22 @@ yarn_hotCountRank_output_path = "/user/go2data_rank/taoyongbo/output/hotCountRan
 yarn_hitCountRank_output_path = "/user/go2data_rank/taoyongbo/output/hitCountRank/"
 
 
+#filter rank source
+
+# similarQueryCount
+yarn_similarQueryCount_input_path = "/user/go2data_rank/taoyongbo/input/filterRank/similarQueryCount/"
+
+# sogouViewCount
+zeus_sogouViewCount_path = "/user/go2search/taoyongbo/output/20170921sougouViewCount"
+yarn_sogouViewCount_input_path = "/user/go2data_rank/taoyongbo/input/filterRank/sogouViewCount/"
+
+# vrHitCount
+zeus_vrHitCount_path = "/user/go2data_crawler/dc_log/VR_HITCOUNT"
+yarn_vrHitCount_input_path = "/user/go2data_rank/taoyongbo/input/filterRank/vrHitCount/VR_HITCOUNT"
+
+# vrViewCount
+zeus_vrViewCount_path = "/user/go2data_crawler/dc_log/VR_VIEW"
+yarn_vrViewCount_input_path = "/user/go2data_rank/taoyongbo/input/filterRank/vrViewCount/VR_VIEW"
+
+#filterPoi
+yarn_filterPoi_input_path = "/user/go2data_rank/taoyongbo/input/filterRank/filterPoi/"

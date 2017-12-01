@@ -19,6 +19,7 @@ import utils
 import filecmp
 from rankCluster import multi_rank, single_rank
 import splitFeatureFile
+import subprocess
 
 logger = utils.get_logger('sparkRankFlow')
 
@@ -28,6 +29,8 @@ def parse_excel_upload():
     解析特征阀值并上传
     :return:
     """
+    download_rank_config_commond = 'wget "http://svn.sogou-inc.com/svn/go2map/data/poi/edit/trunk/rank/poi-rank.xlsx"  --user=svnsogoumap --password="Helloworld2012" -O /search/odin/taoyongbo/rank/input/poi-rank.xlsx'
+    utils.execute_command(download_rank_config_commond, shell=True)
 
     # 解析excel 生成特征阈值及权重配置文件
     parse_commond = "java  -Xms800M -Xmx2g -jar " + constant.java_jar_path + "excelparse.jar"
@@ -58,14 +61,14 @@ def feature_poi_create(environment='beta'):
     :return:
     """
     global zeus_poi_path
-    global zeus_buspoi_path
+    # global zeus_buspoi_path
     global zeus_myself_path
     global zeus_structure_path
     global zeus_polygon_path
     global rank_output_path
     logger.info("current environment:" + environment)
     logger.info("zeus_poi_path:" + zeus_poi_path)
-    logger.info("zeus_buspoi_path:" + zeus_buspoi_path)
+    # logger.info("zeus_buspoi_path:" + zeus_buspoi_path)
     logger.info("zeus_myself_path:" + zeus_myself_path)
     logger.info("zeus_structure_path:" + zeus_structure_path)
     logger.info("zeus_polygon_path:" + zeus_polygon_path)
@@ -73,7 +76,7 @@ def feature_poi_create(environment='beta'):
 
     # 特征值数据生产
     feature_poi_create_time = time.time()
-    sparkTask.xml_distcp(zeus_poi_path, zeus_buspoi_path, zeus_myself_path, zeus_structure_path, zeus_polygon_path)
+    sparkTask.xml_distcp(zeus_poi_path, zeus_myself_path, zeus_structure_path, zeus_polygon_path)
     logger.info("xml_distcp finished,used time:%s s", str(time.time() - feature_poi_create_time))
 
     sparkTask.poi_task(environment)
@@ -139,10 +142,8 @@ def rank_create():
     rank 生产并备份
     :return:
     """
-    #切割文件
+    # 切割文件
     splitFeatureFile.split_file()
-
-
 
     # 本地rank数据清空
     commond = "rm -rf " + constant.rank_path + "*"
@@ -155,9 +156,6 @@ def rank_create():
     multi_rank_path = constant.rank_path + "multi/"
     single_rank_path = constant.rank_path + "single/"
 
-    if os.path.exists(constant.local_featurePoi_center_path):
-        shutil.rmtree(constant.local_featurePoi_center_path)
-    os.mkdir(constant.local_featurePoi_center_path)
     if os.path.exists(multi_rank_path):
         shutil.rmtree(multi_rank_path)
     os.mkdir(multi_rank_path)
@@ -173,7 +171,7 @@ def rank_create():
     # 多维度特征值文件聚类
     cluster_begin_time = time.time()
 
-    rankPrediction.files_rank_cluster(constant.local_split_featurePoi_path,multi_rank_path)
+    rankPrediction.files_rank_cluster(constant.local_split_featurePoi_path, multi_rank_path)
 
     # poiRankCluster.files_rank_cluster(constant.local_featurePoi_path, multi_rank_path, "multi")
     logger.info("multi featurePoi cluster finished,used time:%s s", str(time.time() - cluster_begin_time))
@@ -266,15 +264,25 @@ def back_rank(environment):
     download_begin_time = time.time()
     now = environment + '_' + datetime.datetime.now().strftime('%Y%m%d_%H:%M')
     current_back_rank_path = constant.back_rank_path + now
+
     if os.path.exists(current_back_rank_path):
         shutil.rmtree(current_back_rank_path)
     os.mkdir(current_back_rank_path)
 
-    commond = "hadoop fs -get "+rank_output_path+"/*-rank " + current_back_rank_path
+    rank_path = current_back_rank_path + '/rank/'
+    os.mkdir(rank_path)
+    commond = "hadoop fs -get " + rank_output_path + "/*-rank " + rank_path
     utils.execute_command(commond, shell=True)
 
-    mv_commond = "mv " + constant.local_featurePoi_center_path + " " + current_back_rank_path + "/" + now + "_center"
-    utils.execute_command(mv_commond, shell=True)
+    brand_path = current_back_rank_path + '/brand/'
+    os.mkdir(brand_path)
+    brand_commond = "hadoop fs -text taoyongbo/output/rank/brandRank/part* > " + brand_path + 'brand.txt'
+    utils.execute_command(brand_commond, shell=True)
+
+    structure_path = current_back_rank_path + '/structure/'
+    os.mkdir(structure_path)
+    structure_commond = "cp /search/odin/taoyongbo/rank/rankResult/structureOptimizeRank /search/odin/taoyongbo/rank/result/structureRank " + structure_path
+    utils.execute_command(structure_commond, shell=True)
 
     logger.info("rank backup finished,used time:%s s", str(time.time() - download_begin_time))
 
@@ -303,6 +311,36 @@ def structure_rank_create(environment):
     utils.execute_command(upload_rank_structure_status_commond, shell=True)
 
     logger.info("spark structure_rank_create finished,used time:%s s", str(time.time() - structure_rank_create_time))
+
+
+def kill_app():
+    cmd = "yarn application -list | awk -F ' ' '{print $1,$4}'"
+    output = utils.get_shell_output(cmd)
+    kill_cmd = "yarn application -kill "
+
+    for line in output:
+        field = line.strip().split(" ")
+        appId = field[0]
+        user = field[1]
+        if user == "go2data_rank":
+            kill_app = kill_cmd + appId
+            utils.execute_command(kill_app)
+            logger.info("application:{app} kill done".format(app=appId))
+
+
+def async_data(environment):
+    try:
+        cmd = "wc -l /search/odin/taoyongbo/rank/rankResult/multiRank"
+        output = utils.get_shell_output(cmd)
+        total_count = 0
+        for line in output:
+            field = line.strip().split(" ")
+            total_count = int(field[0])
+
+        if total_count > 0 and environment == "prod":
+            subprocess.Popen("python async.py", shell=True)
+    except:
+        logger.info("GpsCustomStatisticTask excute failed")
 
 
 def main(environment='beta'):
@@ -340,10 +378,11 @@ if __name__ == '__main__':
     input = sys.argv[1]
     input_paths = input.split(",")
     zeus_poi_path = input_paths[0]
-    zeus_buspoi_path = input_paths[1]
-    zeus_myself_path = input_paths[2]
-    zeus_structure_path = input_paths[3]
-    zeus_polygon_path = input_paths[4]
-    rank_output_path = input_paths[5]
+    # zeus_buspoi_path = input_paths[1]
+    zeus_myself_path = input_paths[1]
+    zeus_structure_path = input_paths[2]
+    zeus_polygon_path = input_paths[3]
+    rank_output_path = input_paths[4]
+
     main(environment=environment)
     sys.exit(0)

@@ -108,3 +108,9 @@ def print_exception():
     exception = 'EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj)
     print(exception)
     return exception
+
+
+def get_shell_output(cmd):
+    process = os.popen(cmd)  # return file
+    output = process.readlines()
+    return output

@@ -118,7 +118,7 @@ def poiXml_buspoi_distcp(zeus_buspoi_path=None):
     logger.info("poiXml_buspoi_distcp finished")
 
 
-def xml_distcp(zeus_poi_path, zeus_buspoi_path, zeus_myself_path, zeus_structure_path, zeus_polygon_path):
+def xml_distcp(zeus_poi_path, zeus_myself_path, zeus_structure_path, zeus_polygon_path):
     pool = multiprocessing.Pool(processes=5)
     for i in range(1, 6):
         if i == 1:
@@ -126,7 +126,8 @@ def xml_distcp(zeus_poi_path, zeus_buspoi_path, zeus_myself_path, zeus_structure
         if i == 2:
             pool.apply_async(poiXml_myself_distcp, (zeus_myself_path,))
         if i == 3:
-            pool.apply_async(poiXml_buspoi_distcp, (zeus_buspoi_path,))
+            continue
+            # pool.apply_async(poiXml_buspoi_distcp, (zeus_buspoi_path,))
         if i == 4:
             pool.apply_async(structure_distcp, (zeus_structure_path,))
         if i == 5:
@@ -180,6 +181,44 @@ def matchCount_distcp():
     commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.yarn_matchCount_output_path + " " + constant.yarn_matchCount_input_path
     utils.execute_command(commond, shell=True)
     logger.info("matchCount_distcp finished")
+
+
+def filter_source_distcp(zeus_filterPoi_input_path,zeus_similarQueryCount_path):
+    logger.info("filter_source_distcp process")
+
+    fq_rm_commond = "hadoop fs -rmr " + constant.yarn_filterPoi_input_path
+    utils.execute_command(fq_rm_commond, shell=True)
+    sq_commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.zeus_path+zeus_filterPoi_input_path + " " + constant.yarn_filterPoi_input_path
+    utils.execute_command(sq_commond, shell=True)
+
+
+
+    sq_rm_commond = "hadoop fs -rmr " + constant.yarn_similarQueryCount_input_path
+    utils.execute_command(sq_rm_commond, shell=True)
+    sq_commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.zeus_path+zeus_similarQueryCount_path + " " + constant.yarn_similarQueryCount_input_path
+    utils.execute_command(sq_commond, shell=True)
+
+    sv_rm_commond = "hadoop fs -rmr " + constant.yarn_sogouViewCount_input_path
+    utils.execute_command(sv_rm_commond, shell=True)
+    sv_commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.zeus_path+constant.zeus_sogouViewCount_path + " " + constant.yarn_sogouViewCount_input_path
+    utils.execute_command(sv_commond, shell=True)
+
+    vrh_rm_commond = "hadoop fs -rmr " + constant.yarn_vrHitCount_input_path
+    utils.execute_command(vrh_rm_commond, shell=True)
+    vrh_commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.zeus_path+constant.zeus_vrHitCount_path + " " + constant.yarn_vrHitCount_input_path
+    utils.execute_command(vrh_commond, shell=True)
+
+    vrv_rm_commond = "hadoop fs -rmr " + constant.yarn_vrViewCount_input_path
+    utils.execute_command(vrv_rm_commond, shell=True)
+    vrv_commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.zeus_path+constant.zeus_vrViewCount_path + " " + constant.yarn_vrViewCount_input_path
+    utils.execute_command(vrv_commond, shell=True)
+
+
+    logger.info("filter_source_distcp finished")
+
+
+
+
 
 def rankCombine_task(environment='beta'):
     logger.info("spark rankCombine_task process:{environment}".format(environment=environment))
@@ -290,6 +329,36 @@ def structureMapRank_task(environment='beta'):
     utils.execute_command(commond, shell=True)
     logger.info("spark structureMapRank_task finished")
 
+def BrandRankTestTask(environment='beta'):
+    logger.info("spark brandRank_task process:{environment}".format(environment=environment))
+    scala_jar_path = root_path + environment + '/scala_spark/'
+    scala_libjars_path = scala_jar_path + 'lib'
+    fileList, dirList = utils.get_files(scala_libjars_path)
+    libjars = ",".join(fileList)
+    commond = "spark-submit --master yarn --deploy-mode cluster --name BrandRankTestTask --class cluster.task.BrandRankTestTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    utils.execute_command(commond, shell=True)
+    logger.info("spark brandRank_task finished")
+
+def gpsCustomStatistic_task(output_path,environment='beta'):
+    logger.info("spark gpsCustomStatistic_task process:{environment}".format(environment=environment))
+    scala_jar_path = root_path + environment + '/scala_spark/'
+    scala_libjars_path = scala_jar_path + 'lib'
+    fileList, dirList = utils.get_files(scala_libjars_path)
+    libjars = ",".join(fileList)
+    commond = "spark-submit --master yarn --deploy-mode cluster --name gpsCustomStatistic_task --class cluster.tempTask.GpsCustomStatisticTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=5000 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output_path
+    utils.execute_command(commond, shell=True)
+    logger.info("spark gpsCustomStatistic_task finished")
+
+
+def KeyWordStatisticTask(environment='beta'):
+    logger.info("spark KeyWordStatisticTask process:{environment}".format(environment=environment))
+    scala_jar_path = root_path + environment + '/scala_spark/'
+    scala_libjars_path = scala_jar_path + 'lib'
+    fileList, dirList = utils.get_files(scala_libjars_path)
+    libjars = ",".join(fileList)
+    commond = "spark-submit --master yarn --deploy-mode cluster --name KeyWordStatisticTask --class cluster.tempTask.KeyWordStatisticTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    utils.execute_command(commond, shell=True)
+    logger.info("spark KeyWordStatisticTask finished")
 
 def show_menu(task_menu):
     print("***************current task list*****************")
@@ -332,6 +401,9 @@ task_menu = {
     17: dict(name="rank_optimize_task", function=rank_optimize_task),
     18: dict(name="matchCount_distcp", function=matchCount_distcp),
     19:dict(name="structureMapRank_task", function=structureMapRank_task),
+    20: dict(name="BrandRankTestTask", function=BrandRankTestTask),
+    21: dict(name="gpsCustomStatistic_task", function=gpsCustomStatistic_task),
+    22: dict(name="KeyWordStatisticTask", function=KeyWordStatisticTask),
 
 }
 
