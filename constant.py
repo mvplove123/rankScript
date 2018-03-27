@@ -2,36 +2,46 @@
 lib_path = "/search/odin/taoyongbo/rank/beta/scala_spark/lib"
 jar_path = "/search/odin/taoyongbo/rank/beta/scala_spark/"
 java_jar_path = "/search/odin/taoyongbo/rank/java_spark/"
-local_featurePoi_path = '/search/odin/taoyongbo/rank/featurePoi/'
-local_city_featurePoi_path = '/search/odin/taoyongbo/rank/cityFeaturePoi/'
-local_featurePoi_center_path = '/search/odin/taoyongbo/rank/rank_center/'
-local_structure_optimize_path = '/search/odin/taoyongbo/rank/rankResult/structureOptimizeRank'
-local_structure_rank_path = '/search/odin/taoyongbo/rank/result/structureRank'
-local_split_featurePoi_path = '/search/odin/taoyongbo/rank/splitfeaturePoi/'
-default_rank_output = 'taoyongbo/output/multiOptimizeRank'
+local_featurePoi_path = '/featurePoi/'
+local_brandfeaturePoi_path = '/brandFeaturePoi/'
+local_city_featurePoi_path = '/cityFeaturePoi/'
+local_multi_path = "/multi/"
+brand_rank_path = "/brandRank/"
 
-rank_path = "/search/odin/taoyongbo/rank/rankResult/"
+hotCount_single_rank_path = "/single/hotCount/"
+hitCount_single_rank_path = "/single/hitCount/"
+
+weight_path = '/config/poi-weight.txt '
+poi_threshold_path = '/config/poi-threshold.txt'
+
+local_structure_optimize_path = '/result/structureOptimizeRank'
+local_structure_rank_path = '/result/structureRank'
+local_split_featurePoi_path = '/splitfeaturePoi/'
+
+rank_version_path = "/search/odin/taoyongbo/rank/rankVersion/"
 
 root_path = '/search/odin/taoyongbo/rank/'
 
-
-
 zeus_path = "hftp://master01.zeus.hadoop.sogou:50070"
 yarn_path = "hdfs://master01.yarn.hadoop.sogou:6230"
+yarn_mars_path = "hdfs://master01.mars.hadoop.sogou:6230"
+
+# http://master01.zeus.hadoop.sogou
+default_rank_output_path = "taoyongbo/rank/20171227/"
 
 # poi xml original files
 zeus_poi_path = "/user/go2data/sdb_data/all_data/nochange_data/2016-10-20/result/POI"
-yarn_poi_input_path = "/user/go2data_rank/taoyongbo/input/poiXml1"
+yarn_poi_input_path = "/poiXml1"
 
 zeus_buspoi_path = "/user/go2data/sdb_data/all_data/nochange_data/2016-10-20/result/BUSPOI"
-yarn_buspoi_input_path = "/user/go2data_rank/taoyongbo/input/poiXml2"
+yarn_buspoi_input_path = "/poiXml2"
 
 zeus_myself_path = "/user/go2data/sdb_data/all_data/poi_data/2016-10-31/raw_data/myself"
-yarn_myself_input_path = "/user/go2data_rank/taoyongbo/input/poiXml3"
+yarn_myself_input_path = "/poiXml3"
 
 # name structure original files
 zeus_structure_path = "/user/go2data/huajin.shen_dev/structure_by_name/2016-10-20/name_prefix_structure_release"
-yarn_structure_input_path = "/user/go2data_rank/taoyongbo/input/nameStructure"
+yarn_structure_input_path = "/nameStructure"
 
 # matchCount
 zeus_matchCount_path = "/user/go2search/taoyongbo/output/caculate"
@@ -40,27 +50,21 @@ yarn_matchCount_output_path = "/user/go2data_rank/taoyongbo/output/matchCount"
 
 # gpsHot
 zeus_gps_path = "/user/go2search/taoyongbo/output/gps"
-yarn_gps_input_path = "/user/go2data_rank/taoyongbo/input/gps"
+yarn_gps_input_path = "/gps"
 
 # polygon
 zeus_polygon_path = "/user/go2data/sdb_data/all_data/nochange_data/2016-10-20/result/POLYGON/"
-yarn_polygon_input_path = "/user/go2data_rank/taoyongbo/input/polygonXml"
+yarn_polygon_input_path = "/polygonXml"
 
 # poiHotCount
 yarn_poiHotCount_input_path = "/user/go2data_rank/taoyongbo/input/poiHotCount"
 
 # searchCount
-yarn_searchCount_input_path = "/user/go2data_rank/taoyongbo/input/searchCount"
+yarn_searchCount_input_path = "/searchCount"
 
 upload_local_path = '/search/odin/taoyongbo/rank/result/'
 
 rsync_version_path = '/search/odin/taoyongbo/rank/rsync_version/'
-
-
-#back_rank
-back_rank_path = '/search/odin/taoyongbo/rank/back_rank/'
-default_rank_output_path = '/search/odin/taoyongbo/output/rank/multiOptimizeRank'
-
 
 # poi rank
 zeus_multiRank_path = "/user/go2search/taoyongbo/input/multiRank/"
@@ -71,11 +75,10 @@ yarn_multiRank_output_path = "/user/go2data_rank/taoyongbo/output/multiRank/"
 yarn_hotCountRank_output_path = "/user/go2data_rank/taoyongbo/output/hotCountRank/"
 yarn_hitCountRank_output_path = "/user/go2data_rank/taoyongbo/output/hitCountRank/"
 
-
-#filter rank source
+# filter rank source
 
 # similarQueryCount
-yarn_similarQueryCount_input_path = "/user/go2data_rank/taoyongbo/input/filterRank/similarQueryCount/"
+yarn_similarQueryCount_input_path = "/similarQueryCount/"
 
 # sogouViewCount
 zeus_sogouViewCount_path = "/user/go2search/taoyongbo/output/20170921sougouViewCount"
@@ -89,5 +92,8 @@ yarn_vrHitCount_input_path = "/user/go2data_rank/taoyongbo/input/filterRank/vrHi
 zeus_vrViewCount_path = "/user/go2data_crawler/dc_log/VR_VIEW"
 yarn_vrViewCount_input_path = "/user/go2data_rank/taoyongbo/input/filterRank/vrViewCount/VR_VIEW"
 
-#filterPoi
-yarn_filterPoi_input_path = "/user/go2data_rank/taoyongbo/input/filterRank/filterPoi/"
+# filterPoi
+yarn_filterPoi_input_path = "/filterPoi/"
+
+local_sign = "local"
+cluster_sign = "hadoop"

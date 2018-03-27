@@ -7,10 +7,12 @@ import shlex
 import subprocess
 import time
 
-
-
 # 获取目录下的所有文件夹和文件
 import sys
+
+import shutil
+
+import constant
 
 
 def get_files(path):
@@ -38,7 +40,7 @@ def get_files(path):
     for dl in dirList:
         if (i_dl == 0):
             i_dl = i_dl + 1
-    return fileList,dirList
+    return fileList, dirList
     # for fl in fileList:
     #     # 打印文件
     #     print '-' * (int(dirList[0])), fl
@@ -52,7 +54,7 @@ def get_logger(log_file_name):
     logger = logging.getLogger(log_file_name)
     logger.setLevel(logging.DEBUG)
     # 创建一个handler，用于写入日志文件
-    fh = logging.FileHandler(log_file_name+".log")
+    fh = logging.FileHandler(log_file_name + ".log")
     fh.setLevel(logging.DEBUG)
     # 再创建一个handler，用于输出到控制台
     ch = logging.StreamHandler()
@@ -114,3 +116,29 @@ def get_shell_output(cmd):
     process = os.popen(cmd)  # return file
     output = process.readlines()
     return output
+
+
+def del_dir(path):
+    cmd = "ls -lt " + path + " | awk '{print $9}'"
+    infos = get_shell_output(cmd)
+    dir_names = []
+    for info in infos:
+        if info and '_' in info:
+            fields = info.split('_')
+            dir_names.append(int(fields[0]))
+    dir_names.sort(reverse=True)
+    dir_paths = [path + str(name) + "*" for name in dir_names[3:]]
+    rm_dir = 'rm -rf ' + ' '.join(dir_paths)
+    execute_command(rm_dir, shell=True)
+
+
+def rm_mkdir(path, source):
+    if source == constant.local_sign:
+        if os.path.exists(path):
+            shutil.rmtree(path)
+        os.makedirs(path)
+    else:
+        rm_commond = "hadoop fs -rm -r " + path
+        execute_command(rm_commond, shell=True)
+        mkdir_commond = "hadoop fs -mkdir " + path
+        execute_command(mkdir_commond, shell=True)

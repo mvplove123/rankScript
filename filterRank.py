@@ -54,6 +54,7 @@ if __name__ == '__main__':
     logger.info("filter_poi_input_path:" + ','.join(input_paths[:-1]))
     logger.info("filter_poi_output_path:" + filter_poi_output_path)
     sparkTask.filter_source_distcp(zeus_filterPoi_input_path=filter_poi_input_path,
-                                   zeus_similarQueryCount_path=zeus_similarQueryCount_path)
-    sparkTask.gpsCustomStatistic_task(output_path=filter_poi_output_path, environment=environment)
+                                   zeus_similarQueryCount_path=zeus_similarQueryCount_path,
+                                   rank_output_path=filter_poi_output_path)
+    sparkTask.gpsCustomStatistic_task(rank_output_path=filter_poi_output_path, environment=environment)
     logger.info("filterRank work flow end")

@@ -12,7 +12,6 @@ import time
 
 import numpy as np
 import pandas as pd
-from sklearn import metrics
 from sklearn.externals import joblib
 
 import utils
@@ -91,10 +90,13 @@ def load_models(model_file_list):
     return model_dict
 
 
-def files_rank_cluster(local_featurePoi_path, output_path=None, cluster_type="multi", column=None):
+def files_rank_cluster(local_featurePoi_path, output_path=None, weight_path=None):
     global local_featurePoiRank_path
+    global local_weight_path
     if output_path:
         local_featurePoiRank_path = output_path
+    if weight_path:
+        local_weight_path = weight_path
 
     logger.info(local_featurePoiRank_path)
     begin_time = time.time()

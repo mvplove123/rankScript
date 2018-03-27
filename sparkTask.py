@@ -11,14 +11,15 @@ input = "/user/go2data_rank/taoyongbo/input/"
 output = "/user/go2data_rank/taoyongbo/output/"
 
 
-def poi_task(environment='beta'):
+def poi_task(environment='beta', rank_output_path=constant.default_rank_output_path):
     logger.info("spark poi_task process,environment:{environment}".format(environment=environment))
     scala_jar_path = root_path + environment + '/scala_spark/'
     scala_libjars_path = scala_jar_path + 'lib'
     fileList, dirList = utils.get_files(scala_libjars_path)
     libjars = ",".join(fileList)
 
-    commond = "spark-submit --master yarn --deploy-mode cluster --name PoiTask --class cluster.task.PoiTask --executor-memory 4G --num-executors 19 --executor-cores 5  --conf spark.default.parallelism=300  " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    commond = "spark-submit --master yarn --deploy-mode cluster --name PoiTask --class cluster.task.PoiTask --executor-memory 4G --num-executors 19 --executor-cores 5  --conf spark.default.parallelism=300  " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + rank_output_path
+
     utils.execute_command(commond, shell=True)
     logger.info("spark poi_task finished")
 
@@ -40,12 +41,12 @@ def matchcount_task(environment='beta'):
     scala_libjars_path = scala_jar_path + 'lib'
     fileList, dirList = utils.get_files(scala_libjars_path)
     libjars = ",".join(fileList)
-    commond = "spark-submit --master yarn --deploy-mode cluster --name MatchCountTask --class cluster.task.MatchCountTask --executor-memory 4G --num-executors 19 --executor-cores 5  --conf spark.default.parallelism=3000 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    commond = "spark-submit --master yarn --deploy-mode cluster --name MatchCountTask --class cluster.task.MatchCountTask --executor-memory 4G --num-executors 19 --executor-cores 5  --conf spark.default.parallelism=5000 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
     utils.execute_command(commond, shell=True)
     logger.info("spark matchcount_task finished")
 
 
-def rank_optimize_task(environment='beta',rank_output_path=constant.default_rank_output_path):
+def rank_optimize_task(environment='beta', rank_output_path=constant.default_rank_output_path):
     logger.info("spark rank_optimization process:{environment}".format(environment=environment))
     scala_jar_path = root_path + environment + '/scala_spark/'
     scala_libjars_path = scala_jar_path + 'lib'
@@ -62,42 +63,42 @@ def rank_distcp():
     commond0 = "hadoop fs -rmr " + constant.yarn_multiRank_output_path + " " + constant.yarn_hotCountRank_output_path + " " + constant.yarn_hitCountRank_output_path
     utils.execute_command(commond0, shell=True)
 
-    commond1 = "hadoop distcp -overwrite -m 50 " + constant.zeus_path + constant.zeus_multiRank_path + " " + constant.yarn_multiRank_output_path
+    commond1 = "hadoop distcp -overwrite -m 50 " + constant.yarn_mars_path + constant.zeus_multiRank_path + " " + constant.yarn_multiRank_output_path
     utils.execute_command(commond1, shell=True)
 
-    commond2 = "hadoop distcp -overwrite -m 50 " + constant.zeus_path + constant.zeus_hotCountRank_path + " " + constant.yarn_hotCountRank_output_path
+    commond2 = "hadoop distcp -overwrite -m 50 " + constant.yarn_mars_path + constant.zeus_hotCountRank_path + " " + constant.yarn_hotCountRank_output_path
     utils.execute_command(commond2, shell=True)
 
-    commond3 = "hadoop distcp -overwrite -m 50 " + constant.zeus_path + constant.zeus_hitCountRank_path + " " + constant.yarn_hitCountRank_output_path
+    commond3 = "hadoop distcp -overwrite -m 50 " + constant.yarn_mars_path + constant.zeus_hitCountRank_path + " " + constant.yarn_hitCountRank_output_path
     utils.execute_command(commond3, shell=True)
 
     logger.info("rank_distcp finished")
 
 
-def poiXml_myself_distcp(zeus_myself_path=None):
+def poiXml_myself_distcp(zeus_myself_path=None, rank_output_path=constant.default_rank_output_path):
     logger.info("poiXml_myself_distcp process")
 
     if zeus_myself_path is not None:
         constant.zeus_myself_path = zeus_myself_path
 
-    rm_commond3 = "hadoop fs -rmr " + constant.yarn_myself_input_path
+    rm_commond3 = "hadoop fs -rmr " + rank_output_path + constant.yarn_myself_input_path
     utils.execute_command(rm_commond3, shell=True)
 
-    commond3 = "hadoop distcp -overwrite -m 30 " + constant.zeus_path + constant.zeus_myself_path + " " + constant.yarn_myself_input_path
+    commond3 = "hadoop distcp -overwrite -m 30 " + constant.yarn_mars_path + constant.zeus_myself_path + " " + rank_output_path + constant.yarn_myself_input_path
     utils.execute_command(commond3, shell=True)
     logger.info("poiXml_myself_distcp finished")
 
 
-def poiXml_poi_distcp(zeus_poi_path=None):
+def poiXml_poi_distcp(zeus_poi_path=None, rank_output_path=constant.default_rank_output_path):
     logger.info("poiXml_poi_distcp process")
 
     if zeus_poi_path is not None:
         constant.zeus_poi_path = zeus_poi_path
 
-    rm_commond1 = "hadoop fs -rmr " + constant.yarn_poi_input_path
+    rm_commond1 = "hadoop fs -rmr " + rank_output_path + constant.yarn_poi_input_path
     utils.execute_command(rm_commond1, shell=True)
 
-    commond1 = "hadoop distcp -overwrite " + constant.zeus_path + constant.zeus_poi_path + " " + constant.yarn_poi_input_path
+    commond1 = "hadoop distcp -overwrite " + constant.yarn_mars_path + constant.zeus_poi_path + " " + rank_output_path + constant.yarn_poi_input_path
     utils.execute_command(commond1, shell=True)
 
     logger.info("poiXml_poi_distcp finished")
@@ -112,121 +113,116 @@ def poiXml_buspoi_distcp(zeus_buspoi_path=None):
     rm_commond2 = "hadoop fs -rmr " + constant.yarn_buspoi_input_path
     utils.execute_command(rm_commond2, shell=True)
 
-    commond2 = "hadoop distcp -overwrite " + constant.zeus_path + constant.zeus_buspoi_path + " " + constant.yarn_buspoi_input_path
+    commond2 = "hadoop distcp -overwrite " + constant.yarn_mars_path + constant.zeus_buspoi_path + " " + constant.yarn_buspoi_input_path
     utils.execute_command(commond2, shell=True)
 
     logger.info("poiXml_buspoi_distcp finished")
 
 
-def xml_distcp(zeus_poi_path, zeus_myself_path, zeus_structure_path, zeus_polygon_path):
+def xml_distcp(zeus_poi_path, zeus_myself_path, zeus_structure_path, zeus_polygon_path, rank_output_path):
     pool = multiprocessing.Pool(processes=5)
     for i in range(1, 6):
         if i == 1:
-            pool.apply_async(poiXml_poi_distcp, (zeus_poi_path,))
+            pool.apply_async(poiXml_poi_distcp, (zeus_poi_path, rank_output_path,))
         if i == 2:
-            pool.apply_async(poiXml_myself_distcp, (zeus_myself_path,))
+            pool.apply_async(poiXml_myself_distcp, (zeus_myself_path, rank_output_path,))
         if i == 3:
             continue
             # pool.apply_async(poiXml_buspoi_distcp, (zeus_buspoi_path,))
         if i == 4:
-            pool.apply_async(structure_distcp, (zeus_structure_path,))
+            pool.apply_async(structure_distcp, (zeus_structure_path, rank_output_path,))
         if i == 5:
-            pool.apply_async(polygon_distcp, (zeus_polygon_path,))
+            pool.apply_async(polygon_distcp, (zeus_polygon_path, rank_output_path,))
 
     pool.close()
     pool.join()
 
 
-def structure_distcp(zeus_structure_path=None):
+def structure_distcp(zeus_structure_path=None, rank_output_path=constant.default_rank_output_path):
     if zeus_structure_path is not None:
         constant.zeus_structure_path = zeus_structure_path
     logger.info("structure_distcp process")
 
-    rm_commond = "hadoop fs -rmr " + constant.yarn_structure_input_path
+    rm_commond = "hadoop fs -rmr " + rank_output_path + constant.yarn_structure_input_path
     utils.execute_command(rm_commond, shell=True)
 
-    commond = "hadoop distcp -overwrite " + constant.zeus_path + constant.zeus_structure_path + " " + constant.yarn_structure_input_path
+    commond = "hadoop distcp -overwrite " + constant.yarn_mars_path + constant.zeus_structure_path + " " + rank_output_path + constant.yarn_structure_input_path
     utils.execute_command(commond, shell=True)
     logger.info("structure_distcp finished")
 
 
-def polygon_distcp(zeus_polygon_path=None):
+def polygon_distcp(zeus_polygon_path=None, rank_output_path=constant.default_rank_output_path):
     if zeus_polygon_path is not None:
         constant.zeus_polygon_path = zeus_polygon_path
 
     logger.info("polygon_distcp process")
 
-    rm_commond = "hadoop fs -rmr " + constant.yarn_polygon_input_path
+    rm_commond = "hadoop fs -rmr " + rank_output_path + constant.yarn_polygon_input_path
     utils.execute_command(rm_commond, shell=True)
 
-    commond = "hadoop distcp -overwrite " + constant.zeus_path + constant.zeus_polygon_path + " " + constant.yarn_polygon_input_path
+    commond = "hadoop distcp -overwrite " + constant.yarn_mars_path + constant.zeus_polygon_path + " " + rank_output_path + constant.yarn_polygon_input_path
     utils.execute_command(commond, shell=True)
     logger.info("polygon_distcp finished")
 
 
-def gps_distcp():
+def gps_distcp(rank_output_path=constant.default_rank_output_path):
     logger.info("gps_distcp process")
-    rm_commond = "hadoop fs -rmr " + constant.yarn_gps_input_path
+    rm_commond = "hadoop fs -rmr " + rank_output_path + constant.yarn_gps_input_path
     utils.execute_command(rm_commond, shell=True)
 
-    commond = "hadoop distcp -overwrite  -m 50 " + constant.zeus_path + constant.zeus_gps_path + " " + constant.yarn_gps_input_path
+    commond = "hadoop distcp -overwrite  -m 50 " + constant.zeus_path + constant.zeus_gps_path + " " + rank_output_path + constant.yarn_gps_input_path
     utils.execute_command(commond, shell=True)
     logger.info("gps_distcp finished")
+
 
 def matchCount_distcp():
     logger.info("matchCount_distcp process")
     rm_commond = "hadoop fs -rmr " + constant.yarn_matchCount_input_path
     utils.execute_command(rm_commond, shell=True)
 
-    commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.yarn_matchCount_output_path + " " + constant.yarn_matchCount_input_path
+    commond = "hadoop distcp   -update -skipcrccheck -m 50 " + constant.yarn_matchCount_output_path + " " + constant.yarn_matchCount_input_path
     utils.execute_command(commond, shell=True)
     logger.info("matchCount_distcp finished")
 
 
-def filter_source_distcp(zeus_filterPoi_input_path,zeus_similarQueryCount_path):
+def filter_source_distcp(zeus_filterPoi_input_path, zeus_similarQueryCount_path,rank_output_path):
     logger.info("filter_source_distcp process")
 
-    fq_rm_commond = "hadoop fs -rmr " + constant.yarn_filterPoi_input_path
+    fq_rm_commond = "hadoop fs -rmr " + rank_output_path+constant.yarn_filterPoi_input_path
     utils.execute_command(fq_rm_commond, shell=True)
-    sq_commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.zeus_path+zeus_filterPoi_input_path + " " + constant.yarn_filterPoi_input_path
+    sq_commond = "hadoop distcp   -update -skipcrccheck -m 50 " + constant.yarn_mars_path + zeus_filterPoi_input_path + " " + rank_output_path+constant.yarn_filterPoi_input_path
     utils.execute_command(sq_commond, shell=True)
 
-
-
-    sq_rm_commond = "hadoop fs -rmr " + constant.yarn_similarQueryCount_input_path
+    sq_rm_commond = "hadoop fs -rmr " + rank_output_path+constant.yarn_similarQueryCount_input_path
     utils.execute_command(sq_rm_commond, shell=True)
-    sq_commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.zeus_path+zeus_similarQueryCount_path + " " + constant.yarn_similarQueryCount_input_path
+    sq_commond = "hadoop distcp   -update -skipcrccheck -m 50 " + constant.yarn_mars_path + zeus_similarQueryCount_path + " " + rank_output_path+constant.yarn_similarQueryCount_input_path
     utils.execute_command(sq_commond, shell=True)
 
     sv_rm_commond = "hadoop fs -rmr " + constant.yarn_sogouViewCount_input_path
     utils.execute_command(sv_rm_commond, shell=True)
-    sv_commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.zeus_path+constant.zeus_sogouViewCount_path + " " + constant.yarn_sogouViewCount_input_path
+    sv_commond = "hadoop distcp   -update -skipcrccheck -m 50 " + constant.zeus_path + constant.zeus_sogouViewCount_path + " " + constant.yarn_sogouViewCount_input_path
     utils.execute_command(sv_commond, shell=True)
 
     vrh_rm_commond = "hadoop fs -rmr " + constant.yarn_vrHitCount_input_path
     utils.execute_command(vrh_rm_commond, shell=True)
-    vrh_commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.zeus_path+constant.zeus_vrHitCount_path + " " + constant.yarn_vrHitCount_input_path
+    vrh_commond = "hadoop distcp   -update -skipcrccheck -m 50 " + constant.zeus_path + constant.zeus_vrHitCount_path + " " + constant.yarn_vrHitCount_input_path
     utils.execute_command(vrh_commond, shell=True)
 
     vrv_rm_commond = "hadoop fs -rmr " + constant.yarn_vrViewCount_input_path
     utils.execute_command(vrv_rm_commond, shell=True)
-    vrv_commond = "hadoop distcp   -update -skipcrccheck -m 50 " +constant.zeus_path+constant.zeus_vrViewCount_path + " " + constant.yarn_vrViewCount_input_path
+    vrv_commond = "hadoop distcp   -update -skipcrccheck -m 50 " + constant.zeus_path + constant.zeus_vrViewCount_path + " " + constant.yarn_vrViewCount_input_path
     utils.execute_command(vrv_commond, shell=True)
-
 
     logger.info("filter_source_distcp finished")
 
 
-
-
-
-def rankCombine_task(environment='beta'):
+def rankCombine_task(environment='beta',rank_output_path=constant.default_rank_output_path):
     logger.info("spark rankCombine_task process:{environment}".format(environment=environment))
     scala_jar_path = root_path + environment + '/scala_spark/'
     scala_libjars_path = scala_jar_path + 'lib'
     fileList, dirList = utils.get_files(scala_libjars_path)
     libjars = ",".join(fileList)
-    commond = "spark-submit --master yarn --deploy-mode cluster --name RankCombineTask --class cluster.task.RankCombineTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    commond = "spark-submit --master yarn --deploy-mode cluster --name RankCombineTask --class cluster.task.RankCombineTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + rank_output_path
 
     utils.execute_command(commond, shell=True)
     logger.info("spark rankCombine_task finished")
@@ -243,35 +239,35 @@ def featureCombine_task(environment='beta'):
     logger.info("spark featureCombine_task finished")
 
 
-def featureConvert_task(environment='beta'):
+def featureConvert_task(environment='beta', rank_output_path=constant.default_rank_output_path):
     logger.info("spark featureConvert_task process:{environment}".format(environment=environment))
     scala_jar_path = root_path + environment + '/scala_spark/'
     scala_libjars_path = scala_jar_path + 'lib'
     fileList, dirList = utils.get_files(scala_libjars_path)
     libjars = ",".join(fileList)
-    commond = "spark-submit --master yarn --deploy-mode cluster --name FeatureConvertTask --class cluster.task.FeatureConvertTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    commond = "spark-submit --master yarn --deploy-mode cluster --name FeatureConvertTask --class cluster.task.FeatureConvertTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + rank_output_path
     utils.execute_command(commond, shell=True)
     logger.info("spark featureConvert_task finished")
 
 
-def brandRank_task(environment='beta'):
+def brandRank_task(environment='beta', rank_output_path=constant.default_rank_output_path):
     logger.info("spark brandRank_task process:{environment}".format(environment=environment))
     scala_jar_path = root_path + environment + '/scala_spark/'
     scala_libjars_path = scala_jar_path + 'lib'
     fileList, dirList = utils.get_files(scala_libjars_path)
     libjars = ",".join(fileList)
-    commond = "spark-submit --master yarn --deploy-mode cluster --name BrandRankTask --class cluster.task.BrandRankTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    commond = "spark-submit --master yarn --deploy-mode cluster --name BrandRankTask --class cluster.task.BrandRankTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + rank_output_path
     utils.execute_command(commond, shell=True)
     logger.info("spark brandRank_task finished")
 
 
-def gpsPopularity_task(environment='beta'):
+def gpsPopularity_task(environment='beta', rank_output_path=constant.default_rank_output_path):
     logger.info("spark gpsPopularity_task process:{environment}".format(environment=environment))
     scala_jar_path = root_path + environment + '/scala_spark/'
     scala_libjars_path = scala_jar_path + 'lib'
     fileList, dirList = utils.get_files(scala_libjars_path)
     libjars = ",".join(fileList)
-    commond = "spark-submit --master yarn --deploy-mode cluster --name GpsPopularityTask --class cluster.task.GpsPopularityTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=3000 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    commond = "spark-submit --master yarn --deploy-mode cluster --name GpsPopularityTask --class cluster.task.GpsPopularityTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=3000 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + rank_output_path
     utils.execute_command(commond, shell=True)
     logger.info("spark gpsPopularity_task finished")
 
@@ -319,33 +315,44 @@ def polygonRank_task(environment='beta'):
     utils.execute_command(commond, shell=True)
     logger.info("spark polygonRank_task finished")
 
-def structureMapRank_task(environment='beta'):
+
+def structureMapRank_task(environment='beta', rank_output_path=constant.default_rank_output_path):
     logger.info("spark structureMapRank_task process:{environment}".format(environment=environment))
     scala_jar_path = root_path + environment + '/scala_spark/'
     scala_libjars_path = scala_jar_path + 'lib'
     fileList, dirList = utils.get_files(scala_libjars_path)
     libjars = ",".join(fileList)
-    commond = "spark-submit --master yarn --deploy-mode cluster --name StructureMapRankTask --class cluster.task.StructureMapRankTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    commond = "spark-submit --master yarn --deploy-mode cluster --name StructureMapRankTask --class cluster.task.StructureMapRankTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + rank_output_path
     utils.execute_command(commond, shell=True)
     logger.info("spark structureMapRank_task finished")
 
-def BrandRankTestTask(environment='beta'):
+
+def upload_hit_counts(rank_output_path=constant.default_rank_output_path):
+    rm_hit_count_commond = "hadoop fs -rmr "+rank_output_path+constant.yarn_searchCount_input_path
+    utils.execute_command(rm_hit_count_commond, shell=True)
+
+    upload_hit_count_commond = "hadoop fs -put " + constant.upload_local_path + 'hitcounts' + " " + rank_output_path + constant.yarn_searchCount_input_path
+    utils.execute_command(upload_hit_count_commond, shell=True)
+
+
+def brandFeature_task(environment='beta',rank_output_path=constant.default_rank_output_path):
     logger.info("spark brandRank_task process:{environment}".format(environment=environment))
     scala_jar_path = root_path + environment + '/scala_spark/'
     scala_libjars_path = scala_jar_path + 'lib'
     fileList, dirList = utils.get_files(scala_libjars_path)
     libjars = ",".join(fileList)
-    commond = "spark-submit --master yarn --deploy-mode cluster --name BrandRankTestTask --class cluster.task.BrandRankTestTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
+    commond = "spark-submit --master yarn --deploy-mode cluster --name BrandFeatureTask --class cluster.task.BrandFeatureTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + rank_output_path
     utils.execute_command(commond, shell=True)
     logger.info("spark brandRank_task finished")
 
-def gpsCustomStatistic_task(output_path,environment='beta'):
+
+def gpsCustomStatistic_task(rank_output_path, environment='beta'):
     logger.info("spark gpsCustomStatistic_task process:{environment}".format(environment=environment))
     scala_jar_path = root_path + environment + '/scala_spark/'
     scala_libjars_path = scala_jar_path + 'lib'
     fileList, dirList = utils.get_files(scala_libjars_path)
     libjars = ",".join(fileList)
-    commond = "spark-submit --master yarn --deploy-mode cluster --name gpsCustomStatistic_task --class cluster.tempTask.GpsCustomStatisticTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=5000 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output_path
+    commond = "spark-submit --master yarn --deploy-mode cluster --name gpsCustomStatistic_task --class cluster.tempTask.GpsCustomStatisticTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=5000 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + rank_output_path
     utils.execute_command(commond, shell=True)
     logger.info("spark gpsCustomStatistic_task finished")
 
@@ -359,6 +366,7 @@ def KeyWordStatisticTask(environment='beta'):
     commond = "spark-submit --master yarn --deploy-mode cluster --name KeyWordStatisticTask --class cluster.tempTask.KeyWordStatisticTask --jars " + libjars + " --executor-memory 4G --num-executors 19 --executor-cores 5 --conf spark.default.parallelism=350 " + scala_jar_path + "poi-rank-1.0-SNAPSHOT.jar  " + input + " " + output
     utils.execute_command(commond, shell=True)
     logger.info("spark KeyWordStatisticTask finished")
+
 
 def show_menu(task_menu):
     print("***************current task list*****************")
@@ -400,8 +408,8 @@ task_menu = {
     16: dict(name="brandRank_task", function=brandRank_task),
     17: dict(name="rank_optimize_task", function=rank_optimize_task),
     18: dict(name="matchCount_distcp", function=matchCount_distcp),
-    19:dict(name="structureMapRank_task", function=structureMapRank_task),
-    20: dict(name="BrandRankTestTask", function=BrandRankTestTask),
+    19: dict(name="structureMapRank_task", function=structureMapRank_task),
+    20: dict(name="brandFeature_task", function=brandFeature_task),
     21: dict(name="gpsCustomStatistic_task", function=gpsCustomStatistic_task),
     22: dict(name="KeyWordStatisticTask", function=KeyWordStatisticTask),
 

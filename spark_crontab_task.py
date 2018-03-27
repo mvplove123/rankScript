@@ -104,23 +104,23 @@ def match_count_calculate():
 
 
 def upload_hit_counts(hit_count_file):
-    upload_hit_count_commond = hadoop + " fs -mkdir taoyongbo/input/newHitCount"
+    upload_hit_count_commond = hadoop + " fs -mkdir taoyongbo/rank/default/newHitCount"
     utils.execute_command(upload_hit_count_commond, shell=True)
 
-    upload_hit_count_commond = hadoop + " fs -put " + hit_count_file + " " + 'taoyongbo/input/newHitCount'
+    upload_hit_count_commond = hadoop + " fs -put " + hit_count_file + " " + 'taoyongbo/rank/default/newHitCount'
     utils.execute_command(upload_hit_count_commond, shell=True)
 
-    rm_backup_hitcount_commond = hadoop + ' fs -rm -r taoyongbo/input/back_searchCount'
+    rm_backup_hitcount_commond = hadoop + ' fs -rm -r taoyongbo/rank/default/back_hitCount'
     utils.execute_command(rm_backup_hitcount_commond, shell=True)
 
-    mv_backup_hitcount_commond = hadoop + ' fs -mv taoyongbo/input/searchCount taoyongbo/input/back_searchCount'
+    mv_backup_hitcount_commond = hadoop + ' fs -mv taoyongbo/rank/default/hitCount taoyongbo/rank/default/back_hitCount'
     utils.execute_command(mv_backup_hitcount_commond, shell=True)
 
-    rename_matchcount_commond = hadoop + ' fs -mv taoyongbo/input/newHitCount taoyongbo/input/searchCount'
+    rename_matchcount_commond = hadoop + ' fs -mv taoyongbo/rank/default/newHitCount taoyongbo/rank/default/hitCount'
     utils.execute_command(rename_matchcount_commond, shell=True)
     logger.info("spark hitcount_task finished")
 
 
 if __name__ == '__main__':
     rsync_hit_count()
-    match_count_calculate()
+    # match_count_calculate()
